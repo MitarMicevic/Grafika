@@ -56,7 +56,7 @@ struct ProgramState {
     bool ImGuiEnabled = false;
     Camera camera;
     bool CameraMouseMovementUpdateEnabled = true;
-    glm::vec3 backpackPosition = glm::vec3(0.0f);
+    glm::vec3 grassPosition = glm::vec3(0.0f);
     float backpackScale = 1.0f;
     PointLight pointLight;
     ProgramState()
@@ -165,8 +165,8 @@ int main() {
 
     // load models
     // -----------
-    Model ourModel("resources/objects/backpack/backpack.obj");
-    ourModel.SetShaderTextureNamePrefix("material.");
+    Model grassModel("resources/objects/grass/10438_Circular_Grass_Patch_v1_L3.123c72c0e679-bb4b-4162-b0f0-a70f7575d7d8/10438_Circular_Grass_Patch_v1_iterations-2.obj");
+    grassModel.SetShaderTextureNamePrefix("material.");
 
     PointLight& pointLight = programState->pointLight;
     pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
@@ -221,13 +221,18 @@ int main() {
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
-        // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model,
-                               programState->backpackPosition); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(programState->backpackScale));    // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        ourModel.Draw(ourShader);
+        // render the loaded modelGrass
+        glm::mat4 modelGrass = glm::mat4(1.0f);
+//        modelGrass = glm::translate(modelGrass,
+//                               programState->grassPosition); // translate it down so it's at the center of the scene
+//        modelGrass = glm::scale(modelGrass, glm::vec3(programState->backpackScale));    // it's a bit too big for our scene, so scale it down
+
+        modelGrass = glm::translate(modelGrass, programState->grassPosition);
+        //modelGrass = glm::scale(modelGrass, glm::vec3(0.01f));
+        modelGrass = glm::scale(modelGrass, glm::vec3(0.1f, 0.01f, 0.0575f));
+        modelGrass = glm::rotate(modelGrass, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        ourShader.setMat4("model", modelGrass);
+        grassModel.Draw(ourShader);
 
         if (programState->ImGuiEnabled)
             DrawImGui(programState);
@@ -312,7 +317,7 @@ void DrawImGui(ProgramState *programState) {
         ImGui::Text("Hello text");
         ImGui::SliderFloat("Float slider", &f, 0.0, 1.0);
         ImGui::ColorEdit3("Background color", (float *) &programState->clearColor);
-        ImGui::DragFloat3("Backpack position", (float*)&programState->backpackPosition);
+        ImGui::DragFloat3("Backpack position", (float*)&programState->grassPosition);
         ImGui::DragFloat("Backpack scale", &programState->backpackScale, 0.05, 0.1, 4.0);
 
         ImGui::DragFloat("pointLight.constant", &programState->pointLight.constant, 0.05, 0.0, 1.0);
