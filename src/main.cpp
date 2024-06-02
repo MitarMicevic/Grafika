@@ -174,7 +174,7 @@ int main() {
     Model dumpsterModel("resources/objects/dumpster/trashcan.obj");
     dumpsterModel.SetShaderTextureNamePrefix("material.");
 
-    Model truckModel("resources/objects/truck/trashtruck_MODEL.obj");
+    Model truckModel("resources/objects/truck/SC1_02.obj");
     dumpsterModel.SetShaderTextureNamePrefix("material.");
 
     PointLight& pointLight = programState->pointLight;
@@ -246,10 +246,10 @@ int main() {
 
         glm::mat4 modelTrash = glm::mat4(1.0f);
         modelTrash = glm::translate(modelTrash, programState->grassPosition);
-        modelTrash = glm::translate(modelTrash, glm::vec3(1.0, 0.1f, 1.0));
+        modelTrash = glm::translate(modelTrash, glm::vec3(1.0, 0.1f, 2.0));
         //modelGrass = glm::scale(modelBarn, glm::vec3(0.01f));
-        modelTrash = glm::scale(modelTrash, glm::vec3(2.0f, 1.0f, 1.0f));
-        modelTrash = glm::rotate(modelTrash, glm::radians(360.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelTrash = glm::scale(modelTrash, glm::vec3(1.0f, 0.7f, 0.7f));
+        modelTrash = glm::rotate(modelTrash, glm::radians(60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", modelTrash);
 
         trashModel.Draw(ourShader);
@@ -258,7 +258,7 @@ int main() {
         modelDumpster = glm::translate(modelDumpster, programState->grassPosition);
         modelDumpster = glm::translate(modelDumpster, glm::vec3(1.0, 0.1f, -2.0));
         //modelGrass = glm::scale(modelDumpster, glm::vec3(0.01f));
-        modelDumpster = glm::scale(modelDumpster, glm::vec3(0.05f, 0.05f, 0.05f));
+        modelDumpster = glm::scale(modelDumpster, glm::vec3(0.015f, 0.02f, 0.015f));
         modelDumpster = glm::rotate(modelDumpster, glm::radians(360.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         ourShader.setMat4("model", modelDumpster);
 
@@ -266,10 +266,10 @@ int main() {
 
         glm::mat4 modelTruck = glm::mat4(1.0f);
         modelTruck = glm::translate(modelTruck, programState->grassPosition);
-        modelTruck = glm::translate(modelTruck, glm::vec3(-2.0, 0.6f, -2.0));
+        modelTruck = glm::translate(modelTruck, glm::vec3(-3.0, 0.1f, -2.0));
         //modelGrass = glm::scale(modelTruck, glm::vec3(0.01f));
-        modelTruck = glm::scale(modelTruck, glm::vec3(0.5f, 0.5f, 0.5f));
-        modelTruck = glm::rotate(modelTruck, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelTruck = glm::scale(modelTruck, glm::vec3(2.0f, 2.0f, 2.0f));
+        modelTruck = glm::rotate(modelTruck, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", modelTruck);
 
         truckModel.Draw(ourShader);

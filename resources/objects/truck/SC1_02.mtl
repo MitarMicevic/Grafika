@@ -1,0 +1,131 @@
+# Blender MTL File: 'SC1_01.blend'
+# Material Count: 9
+
+newmtl map_Body_SportCar_1
+Ns 225.000000
+Ka 0.986395 0.986395 0.986395
+Kd 0.040790 0.134404 0.295693
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump map_Body_SportCar_1_Normal_OpenGL.png
+map_Kd map_Body_SportCar_1_BaseColor.png
+map_Ns map_Body_SportCar_1_Roughness.png
+refl map_Body_SportCar_1_Metallic.png
+
+newmtl map_Glass_SportCar_1
+Ns 843.638431
+Ka 0.687075 0.687075 0.687075
+Kd 0.014499 0.036492 0.066807
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.570037
+illum 6
+map_Bump map_Glass_SportCar_1_Normal_OpenGL.png
+map_Kd map_Glass_SportCar_1_BaseColor.png
+map_Ns map_Glass_SportCar_1_Roughness.png
+map_d map_Glass_SportCar_1_Opacity.png
+refl map_Glass_SportCar_1_Metallic.png
+
+newmtl map_Items_SC1_022
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.042775 0.800000 0.024821
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_Items_SC1_022_Normal_OpenGL.png
+map_Kd map_Items_SC1_022_BaseColor.png
+map_Ke map_Items_SC1_022_Emissive.png
+map_Ns map_Items_SC1_022_Roughness.png
+refl map_Items_SC1_022_Metallic.png
+
+newmtl map_Lighter_Front_SC1_01
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.760855 0.243800
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.577273
+illum 9
+map_Bump map_Lighter_Front_SC1_01_Normal_OpenGL.png
+map_Kd map_Lighter_Front_SC1_01_BaseColor.png
+map_Ke map_Lighter_Front_SC1_01_Emissive.png
+map_Ns map_Lighter_Front_SC1_01_Roughness.png
+
+newmtl map_Lighters_Gabarit_SC1_002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.519038 0.800000 0.256016
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_Lighters_Gabarit_SC1_002_Normal_OpenGL.png
+map_Kd map_Lighters_Gabarit_SC1_002_BaseColor.png
+map_Ke map_Lighters_Gabarit_SC1_002_Emissive.png
+map_Ns map_Lighters_Gabarit_SC1_002_Roughness.png
+
+newmtl map_Lighters_Stop_SC1_01
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.226584 0.000000 0.000446
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_Lighters_Stop_SC1_01_Normal_OpenGL.png
+map_Kd map_Lighters_Stop_SC1_01_BaseColor.png
+map_Ke map_Lighters_Stop_SC1_01_Emissive.png
+map_Ns map_Lighters_Stop_SC1_01_Roughness.png
+
+newmtl map_Lighters_Turn_SC1_001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.045808 0.000256
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_Lighters_Turn_SC1_001_Normal_OpenGL.png
+map_Kd map_Lighters_Turn_SC1_001_BaseColor.png
+map_Ke map_Lighters_Turn_SC1_001_Emissive.png
+map_Ns map_Lighters_Turn_SC1_001_Roughness.png
+
+newmtl map_RearMove_Lighters
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.005948 0.800000 0.531003
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_RearMove_Lighters_Normal_OpenGL.png
+map_Kd map_RearMove_Lighters_BaseColor.png
+map_Ke map_RearMove_Lighters_Emissive.png
+map_Ns map_RearMove_Lighters_Roughness.png
+refl map_RearMove_Lighters_Metallic.png
+
+newmtl map_Wheels_SportCar_1
+Ns 9.537193
+Ka 1.000000 1.000000 1.000000
+Kd 0.026914 0.045951 0.066807
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump map_Wheels_SportCar_1_Normal_OpenGL.png
+map_Kd map_Wheels_SportCar_1_BaseColor.png
+map_Ns map_Wheels_SportCar_1_Roughness.png
+refl map_Wheels_SportCar_1_Metallic.png
