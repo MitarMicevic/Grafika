@@ -13,4 +13,4 @@
 
 -Other
 1. Blending: applied on the smoke(cloud)
-2. Face culling: applied on the cube
+2. Face culling: applied on the cube(if you enter it you can see everything but nobody can see you)
