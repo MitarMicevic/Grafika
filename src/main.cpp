@@ -33,6 +33,8 @@ unsigned int loadTexture(char const * path);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+bool blinn = false;
+bool blinnKeyPressed = false;
 
 // camera
 
@@ -240,7 +242,6 @@ int main() {
     };
 
     float rustyCubeVertices[] = {
-            // positions          // texture Coords
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -399,6 +400,7 @@ int main() {
         // view/projection transformations
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
+        ourShader.setInt("blinn", blinn);
 
         // render the loaded modelGrass
         glm::mat4 modelGrass = glm::mat4(1.0f);
@@ -526,6 +528,17 @@ void processInput(GLFWwindow *window) {
         programState->camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         programState->camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !blinnKeyPressed)
+    {
+        blinn = !blinn;
+        blinnKeyPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE)
+    {
+        blinnKeyPressed = false;
+    }
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
