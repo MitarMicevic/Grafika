@@ -11,7 +11,11 @@
 1. Skybox: https://www.pngegg.com/en/png-oeswi/download
 2. Rust: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.photowall.com%2Fnz%2Frusty-texture-poster&psig=AOvVaw3WPwXRU11wUXtI0z_hCF9Z&ust=1717599680204000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCND-_sqbwoYDFQAAAAAdAAAAABAE
 
+### Group A
+* Cubemaps(skybox)
+
 ### Other
 1. Blending: applied on the smoke(cloud)
 2. Face culling: applied on the cube(if you enter it you can see everything but nobody can see you)
 3. Press key 'c' to swap between phong and blinn-phong
+4. Video link: https://drive.google.com/file/d/15Sy52ivD1bMI-ZPTlLsEEpEpu0VDLxwL/view?usp=drive_link
