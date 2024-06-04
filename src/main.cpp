@@ -160,7 +160,7 @@ int main() {
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-
+    glEnable(GL_BLEND);
     // build and compile shaders
     // -------------------------
     Shader ourShader("resources/shaders/2.model_lighting.vs", "resources/shaders/2.model_lighting.fs");
@@ -251,7 +251,10 @@ int main() {
     dumpsterModel.SetShaderTextureNamePrefix("material.");
 
     Model truckModel("resources/objects/truck/SC1_02.obj");
-    dumpsterModel.SetShaderTextureNamePrefix("material.");
+    truckModel.SetShaderTextureNamePrefix("material.");
+
+    Model garageModel("resources/objects/garage/smallgarage.obj");
+    garageModel.SetShaderTextureNamePrefix("material.");
 
     PointLight& pointLight = programState->pointLight;
     pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
@@ -321,9 +324,9 @@ int main() {
         grassModel.Draw(ourShader);
 
 
-        glm::mat4 modelTrash = glm::mat4(1.0f);
+        glm::mat4 modelTrash = glm::mat4(0.4f);
         modelTrash = glm::translate(modelTrash, programState->grassPosition);
-        modelTrash = glm::translate(modelTrash, glm::vec3(1.0, 0.1f, 2.0));
+        modelTrash = glm::translate(modelTrash, glm::vec3(-1.0, 0.1f, 2.0));
         //modelGrass = glm::scale(modelBarn, glm::vec3(0.01f));
         modelTrash = glm::scale(modelTrash, glm::vec3(1.0f, 0.7f, 0.7f));
         modelTrash = glm::rotate(modelTrash, glm::radians(60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -331,9 +334,9 @@ int main() {
 
         trashModel.Draw(ourShader);
 
-        glm::mat4 modelDumpster = glm::mat4(1.0f);
+        glm::mat4 modelDumpster = glm::mat4(0.4f);
         modelDumpster = glm::translate(modelDumpster, programState->grassPosition);
-        modelDumpster = glm::translate(modelDumpster, glm::vec3(1.0, 0.1f, -2.0));
+        modelDumpster = glm::translate(modelDumpster, glm::vec3(-1.0, 0.1f, -2.0));
         //modelGrass = glm::scale(modelDumpster, glm::vec3(0.01f));
         modelDumpster = glm::scale(modelDumpster, glm::vec3(0.015f, 0.02f, 0.015f));
         modelDumpster = glm::rotate(modelDumpster, glm::radians(360.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -341,15 +344,26 @@ int main() {
 
         dumpsterModel.Draw(ourShader);
 
-        glm::mat4 modelTruck = glm::mat4(1.0f);
+        glm::mat4 modelTruck = glm::mat4(0.4f);
         modelTruck = glm::translate(modelTruck, programState->grassPosition);
-        modelTruck = glm::translate(modelTruck, glm::vec3(-3.0, 0.1f, -2.0));
+        modelTruck = glm::translate(modelTruck, glm::vec3(-5.0, 0.1f, -2.0));
         //modelGrass = glm::scale(modelTruck, glm::vec3(0.01f));
         modelTruck = glm::scale(modelTruck, glm::vec3(2.0f, 2.0f, 2.0f));
         modelTruck = glm::rotate(modelTruck, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", modelTruck);
 
         truckModel.Draw(ourShader);
+
+        glm::mat4 modelGarage = glm::mat4(2.0f);
+        modelGarage = glm::translate(modelGarage, programState->grassPosition);
+        modelGarage = glm::translate(modelGarage, glm::vec3(3.0, 0.1f, 0.0));
+        //modelGrass = glm::scale(modelTruck, glm::vec3(0.01f));
+        modelGarage = glm::scale(modelGarage, glm::vec3(0.003f, 0.005f, 0.005f));
+        modelGarage = glm::rotate(modelGarage, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        ourShader.setMat4("model", modelGarage);
+
+        garageModel.Draw(ourShader);
+
 
         if (programState->ImGuiEnabled)
             DrawImGui(programState);
@@ -359,7 +373,6 @@ int main() {
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
 
-        //glDepthMask(GL_FALSE);
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.use();// remove translation from the view matrix
         skyboxShader.setMat4("view", glm::mat4(glm::mat3(view)));
@@ -370,7 +383,6 @@ int main() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
-        //glDepthMask(GL_TRUE);
         glDepthFunc(GL_LESS);
 
         glfwSwapBuffers(window);
