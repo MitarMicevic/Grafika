@@ -162,7 +162,7 @@ int main() {
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
+    //glEnable(GL_BLEND);
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_FRONT);
     // build and compile shaders
@@ -239,6 +239,62 @@ int main() {
             1.0f,  0.5f,  0.0f,  1.0f,  0.0f
     };
 
+    float rustyCubeVertices[] = {
+            // positions          // texture Coords
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f, 0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, 0.5f,  0.5f,  0.0f, 1.0f,
+
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, 0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, 0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  -0.5f,  0.5f,  0.0f, 0.0f,
+
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, 0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, 0.5f,  0.0f, 0.0f,
+
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+    unsigned int rustyCubeVAO, rustyCubeVBO;
+    glGenVertexArrays(1, &rustyCubeVAO);
+    glGenBuffers(1, &rustyCubeVBO);
+    glBindVertexArray(rustyCubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, rustyCubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(rustyCubeVertices), &rustyCubeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
     unsigned int smokeVAO, smokeVBO;
     glGenVertexArrays(1, &smokeVAO);
     glGenBuffers(1, &smokeVBO);
@@ -271,6 +327,7 @@ int main() {
 
     unsigned int cubemapTexture = loadCubemap(faces);
     unsigned int smokeTexture = loadTexture(FileSystem::getPath("resources/textures/blendText/smoke.png").c_str());
+    unsigned int rustyCubeTexture = loadTexture(FileSystem::getPath("resources/textures/faceCull/rusty.jpg").c_str());
 
     // load models
     // -----------
@@ -359,7 +416,7 @@ int main() {
 
         glm::mat4 modelTrash = glm::mat4(0.4f);
         modelTrash = glm::translate(modelTrash, programState->grassPosition);
-        modelTrash = glm::translate(modelTrash, glm::vec3(-1.0, 0.1f, 2.0));
+        modelTrash = glm::translate(modelTrash, glm::vec3(-1.0, 0.2f, 2.0));
         //modelGrass = glm::scale(modelBarn, glm::vec3(0.01f));
         modelTrash = glm::scale(modelTrash, glm::vec3(1.0f, 0.7f, 0.7f));
         modelTrash = glm::rotate(modelTrash, glm::radians(60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -369,7 +426,7 @@ int main() {
 
         glm::mat4 modelDumpster = glm::mat4(0.4f);
         modelDumpster = glm::translate(modelDumpster, programState->grassPosition);
-        modelDumpster = glm::translate(modelDumpster, glm::vec3(-1.0, 0.1f, -2.0));
+        modelDumpster = glm::translate(modelDumpster, glm::vec3(-1.0, 0.22f, -2.0));
         //modelGrass = glm::scale(modelDumpster, glm::vec3(0.01f));
         modelDumpster = glm::scale(modelDumpster, glm::vec3(0.015f, 0.02f, 0.015f));
         modelDumpster = glm::rotate(modelDumpster, glm::radians(360.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -379,7 +436,7 @@ int main() {
 
         glm::mat4 modelTruck = glm::mat4(0.4f);
         modelTruck = glm::translate(modelTruck, programState->grassPosition);
-        modelTruck = glm::translate(modelTruck, glm::vec3(-5.0, 0.1f, -2.0));
+        modelTruck = glm::translate(modelTruck, glm::vec3(-5.0, 0.2f, -2.0));
         //modelGrass = glm::scale(modelTruck, glm::vec3(0.01f));
         modelTruck = glm::scale(modelTruck, glm::vec3(2.0f, 2.0f, 2.0f));
         modelTruck = glm::rotate(modelTruck, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -389,7 +446,7 @@ int main() {
 
         glm::mat4 modelGarage = glm::mat4(2.0f);
         modelGarage = glm::translate(modelGarage, programState->grassPosition);
-        modelGarage = glm::translate(modelGarage, glm::vec3(3.0, 0.1f, 0.0));
+        modelGarage = glm::translate(modelGarage, glm::vec3(3.0, 0.05f, 0.0));
         //modelGrass = glm::scale(modelTruck, glm::vec3(0.01f));
         modelGarage = glm::scale(modelGarage, glm::vec3(0.003f, 0.005f, 0.005f));
         modelGarage = glm::rotate(modelGarage, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -411,7 +468,18 @@ int main() {
         blendShader.setMat4("model", blendModel);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-
+        glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glBindVertexArray(rustyCubeVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, rustyCubeTexture);
+        glm::mat4 rustyCubeModel = glm::mat4(1.0f);
+        rustyCubeModel = glm::translate(rustyCubeModel, glm::vec3(1.0f, 0.6f, -1.0f));
+        blendShader.setMat4("model", rustyCubeModel);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDisable(GL_CULL_FACE);
 
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.use();// remove translation from the view matrix
