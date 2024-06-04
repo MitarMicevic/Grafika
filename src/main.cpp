@@ -28,6 +28,8 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
 unsigned int loadCubemap(vector<std::string> faces);
 
+unsigned int loadTexture(char const * path);
+
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -163,6 +165,9 @@ int main() {
     glEnable(GL_BLEND);
     // build and compile shaders
     // -------------------------
+
+    Shader blendShader("resources/shaders/blending.vs", "resources/shaders/blending.fs");
+
     Shader ourShader("resources/shaders/2.model_lighting.vs", "resources/shaders/2.model_lighting.fs");
 
     Shader skyboxShader("resources/shaders/skybox.vs", "resources/shaders/skybox.fs");
@@ -172,6 +177,10 @@ int main() {
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0);
+
+    blendShader.use();
+    blendShader.setInt("texture1", 0);
+
 
     float skyboxVertices[] = {
             // positions
@@ -218,6 +227,28 @@ int main() {
             1.0f, -1.0f,  1.0f
     };
 
+    float smokeVertices[] = {
+            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+            0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+            1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+            1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+    };
+
+    unsigned int smokeVAO, smokeVBO;
+    glGenVertexArrays(1, &smokeVAO);
+    glGenBuffers(1, &smokeVBO);
+    glBindVertexArray(smokeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, smokeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(smokeVertices), smokeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+
     unsigned int skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
@@ -237,7 +268,7 @@ int main() {
     };
 
     unsigned int cubemapTexture = loadCubemap(faces);
-
+    unsigned int smokeTexture = loadTexture(FileSystem::getPath("resources/textures/blendText/smoke.png").c_str());
 
     // load models
     // -----------
@@ -258,7 +289,7 @@ int main() {
 
     PointLight& pointLight = programState->pointLight;
     pointLight.position = glm::vec3(4.0f, 4.0, 0.0);
-    pointLight.ambient = glm::vec3(0.1, 0.1, 0.1);
+    pointLight.ambient = glm::vec3(0.5, 0.7, 0.5);
     pointLight.diffuse = glm::vec3(0.6, 0.6, 0.6);
     pointLight.specular = glm::vec3(1.0, 1.0, 1.0);
 
@@ -364,14 +395,21 @@ int main() {
 
         garageModel.Draw(ourShader);
 
+        blendShader.use();
+        blendShader.setMat4("projection", projection);
+        blendShader.setMat4("view", view);
+        glBindVertexArray(smokeVAO);
+        glBindTexture(GL_TEXTURE_2D, smokeTexture);
 
-        if (programState->ImGuiEnabled)
-            DrawImGui(programState);
+        glm::mat4 blendModel = glm::mat4(10.0f);
+        blendModel = glm::translate(blendModel, programState->grassPosition);
+        blendModel = glm::translate(blendModel, glm::vec3(0.0f, 10.0f, -70.0f));
+        blendModel = glm::scale(blendModel, glm::vec3(9.0f, 9.0f, 9.0f));
+        blendModel = glm::rotate(blendModel, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        blendShader.setMat4("model", blendModel);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
 
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.use();// remove translation from the view matrix
@@ -384,6 +422,10 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
         glDepthFunc(GL_LESS);
+
+        if (programState->ImGuiEnabled)
+            DrawImGui(programState);
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -526,6 +568,43 @@ unsigned int loadCubemap(vector<std::string> faces)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
+}
+
+unsigned int loadTexture(char const * path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
 
     return textureID;
 }
